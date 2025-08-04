@@ -22,8 +22,6 @@
             --warning: #CC0000;  
             --caution: #b37e0c;
             --thinking: #3465A4;
-            --positive: #5CD183;
-            --positivem: #47CF73;
             /* 
             light mode colors
             --color-1: #e5e5e5;
@@ -50,8 +48,7 @@
 
             --warning: #CC0000;  
             --caution: #FFC90A;
-            --positive: #368D56;
-            --positivem: #40B668;
+            --thinking: #3465A4;
         }
         * {
             box-sizing: border-box;
@@ -59,8 +56,8 @@
         }
         body {
             overflow-x: hidden;
+            min-height: 100vh;
             margin: 0;
-            margin-top: 20px;
             padding: 0;
             font-family: "Hack", monospace;
             background-color: var(--color-2);
@@ -86,11 +83,8 @@
             color: var(--color-1m)
         }
         .screen {
-            /*
             background: repeating-radial-gradient(circle at 100% center, var(--color-2), var(--color-2) 1px, var(--color-2m) 1px, var(--color-2m) 2px);
-            */
-            background: repeating-linear-gradient(45deg, var(--color-2) 0px, var(--color-2) 1px, var(--color-2m) 1px, var(--color-2m) 2px) 0% 0% / 2px 2px;
-            width:300px;
+            width:280px;
             margin: 0 auto;
         }
         .form-group {
@@ -99,7 +93,7 @@
         }
         label { 
             display: block; margin-bottom: 0px;
-            font-weight: 500; font-size: 15px;
+            font-weight: 500; font-size: 14px;
             padding: 0px 10px 4px 20px;
             background-color: var(--color-2);
             color: var(--color-1)
@@ -112,16 +106,16 @@
             border: none;
             background-color: transparent;
             color: var(--color-1);
-            width: 300px; min-height: 160px; padding: 10px;
+            width: 280px; min-height: 120px; padding: 10px;
             resize: none;
-            font-size: 15px; font-family: inherit;
+            font-size: 14px; font-family: inherit;
         }
         textarea::placeholder {
             color: transparent;
         }
         textarea:focus::placeholder {background-image: none;}
         textarea:focus { outline: none; }
-            .char-counter { text-align: right; font-size: 15px;
+            .char-counter { text-align: right; font-size: 14px;
                 padding: 3px 10px 3px 0px;
                 background-color: transparent;
                 color: var(--color-1);
@@ -148,28 +142,39 @@
             width: 100%;
             background-color: var(--color-2);
         }
-        .btn-soft {
+        .btn-con {
             flex: 0 0 40%;
             text-align: center;
             width: 50%;
-            font-weight: 500; font-size: 15px;
+            font-weight: 500; font-size: 14px;
             padding: 10px 10px 10px 10px;
             margin: 26px 10px 26px 10px;
             background-color: var(--color-2);
             color: var(--color-1);
+            border: 2px dashed var(--color-1);
+        }
+        .btn-con:hover {
+            background-color: var(--color-2m);
+            color: var(--color-1)
+        }
+        .btn-soft {
+            flex: 0 0 40%;
+            text-align: center;
+            width: 50%;
+            font-weight: 500; font-size: 14px;
+            padding: 10px 10px 10px 10px;
+            margin: 26px 10px 26px 10px;
+            background-color: var(--color-2);
+            color: var(--color-1);
+            border: 2px dashed var(--color-1);
         }
         .btn-soft:hover {
             background-color: var(--color-2m);
-            color: var(--color-1m)
+            color: var(--color-1)
         }
         .notes-list {
             background-color: var(--color-2);
             color: var(--color-1);
-            position: absolute;
-            width: 320px;
-            left: 0;
-              right: 0;
-              margin: auto;
         }
         .notes-header {
             display: flex; justify-content: space-between; align-items: center;
@@ -179,44 +184,39 @@
             color: var(--color-1);
             border-bottom: 2px dashed var(--color-1);
         } .notes-header h3 {
-            font-weight: 500; font-size: 15px;
+            font-weight: 500; font-size: 14px;
         }
         .notes-count {
-            font-weight: 500; font-size: 15px;
+            font-weight: 500; font-size: 14px;
         }
         .note-item {
             padding: 6px 2px 6px 2px;
             margin: 6px 18px 8px 18px;
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center;
+            
             background: repeating-linear-gradient(45deg, var(--color-2) 0px, var(--color-2) 1px, var(--color-2m) 1px, var(--color-2m) 2px) 0% 0% / 2px 2px;
         }
-        .note-wrapper {
-        }
         .note-message {
-            font-weight: 500; font-size: 15px;
+            font-weight: 500; font-size: 14px;
             color: var(--color-1m);
         }
         .note-timestamp {
-            display: none;
             font-style: italic;
-            font-weight: 500; font-size: 13px;
+            font-weight: 500; font-size: 12px;
             color: var(--color-1m);
         }
         .empty-state {
             padding: 6px 2px 6px 2px;
             margin: 0px 18px 0px 18px;
-            font-weight: 500; font-size: 13px;
+            font-weight: 500; font-size: 12px;
             color: var(--color-1m);
         }
         .status-header {
             position: fixed;
             left: 0;
             bottom: 0px;
-            padding-bottom: 20px;
+            padding-bottom: 30px;
             width: 100%;
-            height: 76px;
+            height: 70px;
             display: flex; 
             justify-content: space-between; 
             align-items: center;
@@ -224,12 +224,12 @@
             background-color: var(--color-2);
         }
         .status {
-            margin: 0px 6px 0px 0px;
+            margin: 0px 6px 0px 12px;
             height: 40px;
             flex: 0 0 65%;
             background-color: var(--color-2m);
             color: var(--color-1);
-            font-weight: 500; font-size: 13px;
+            font-weight: 500; font-size: 12px;
             text-align: center;
             display: flex;
             align-items: center;
@@ -248,15 +248,15 @@
             color: var(--thinking);
         }
         .status-action {
-            margin: 0px 0px 0px 6px;
+            margin: 0px 12px 0px 6px;
             height: 40px;
             flex: 0 0 25%;
-            font-weight: 500; font-size: 13px;
+            font-weight: 500; font-size: 12px;
             text-align: center;
             padding: 10px 10px 10px 10px;
             background-color: var(--color-2);
-            color: var(--color-1m);
-            border: 2px dashed var(--color-1m);
+            color: var(--color-1);
+            border: 2px dashed var(--color-1);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -264,76 +264,6 @@
         .status-action:hover {
             background-color: var(--color-2m);
             color: var(--color-1);
-        }
-        .hold {
-            display: flex; 
-            justify-content: space-between; 
-            width: 280px; 
-            margin: 0 auto;
-            padding-top: 16px;
-        }
-
-
-
-        .swipeable {
-            padding: 6px 2px 0px 2px;
-            margin: 6px 18px 8px 18px;
-            position: relative;
-            overflow: hidden;
-            backface-visibility: hidden;
-            vertical-align: bottom;
-            background: none;
-        }
-        .note-inner {
-            position: relative;
-            z-index: 2;
-            backface-visibility: hidden;
-        } .note-inner:active {cursor: grabbing;}
-        .note-message2 {
-            font-weight: 500; font-size: 15px;
-            padding: 6px 2px 6px 2px;
-            color: var(--color-1m);
-            background: repeating-linear-gradient(45deg, var(--color-2) 0px, var(--color-2) 1px, var(--color-2m) 1px, var(--color-2m) 2px) 0% 0% / 2px 2px;
-        }
-        .note-icon {
-
-        }
-        .note-timestamp2 {
-            display: none;
-            font-style: italic;
-            font-weight: 500; font-size: 13px;
-            color: var(--color-1m);
-        }
-        .action-button {
-            position: absolute;
-            z-index: 1;
-            right: 2px;
-            top: 6px;
-            width: 300px;
-            height: 100%;
-            cursor: pointer;
-            text-align: right;
-            color: var(--color-1m);
-            font-size: 15px;
-            transition: .3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-        } 
-        .action-button.delete{
-            background: repeating-linear-gradient(45deg, var(--warning) 0px, var(--warning) 1px, var(--color-2m) 1px, var(--color-2m) 2px) 0% 0% / 2px 2px;
-            transition: .3s ease;
-            color: var(--color-1m);
-
-        }
-        .action-button.delete:hover {
-            transition: .3s ease;
-            color: var(--color-1);
-        }
-        .action-button-text {
-            font-weight: 700; font-size: 15px;
-            margin-bottom: 6px;
-            padding-right: 10px;
         }
     </style>
     </head>
@@ -373,11 +303,9 @@
 
         </div>
         <div class="status-header">
-            <div class="hold">
                 <button id="status" class="status">Scanning for device...</button>
                 <button class="status-action" id="connectBtn">Connect</button>
             </div>
-        </div>
         
         <script>
             // ======================
@@ -397,105 +325,7 @@
             }
             themeToggle.addEventListener('click', toggleTheme);
 
-            // ======================
-            // UI INTERACTIONS
-            // ======================
-            class SwipeFunctionality {
-                constructor(onDeleteCallback) {
-                    this.onDeleteCallback = onDeleteCallback;
 
-                    // listen for the custom event dispatched by NotePrinter after the UI is updated
-                    document.getElementById('notesList').addEventListener('notesUpdated', () => {
-                        this.initSwipe();
-                    });
-
-                    this.initDelete();
-                    this.initSwipe();
-                }
-
-            /**
-            * Sets up the swipe-to-reveal functionality on swipeable items.
-            */
-            initSwipe() {
-                const swipeableElements = document.querySelectorAll('.swipeable .note-inner');
-                const maxSwipe = 60; // The distance in pixels for a full swipe
-
-                swipeableElements.forEach(element => {
-                    // Check if listeners are already attached to prevent duplicates
-                    if (element.dataset.swipeInitialized) return;
-                    element.dataset.swipeInitialized = 'true';
-
-                    let startX = 0;
-                    let currentX = 0;
-                    let isDragging = false;
-
-                    const handleMove = (e) => {
-                        if (!isDragging) return;
-                        const clientX = e.type.startsWith('touch') ? e.touches[0].clientX : e.clientX;
-                        currentX = clientX - startX;
-                        if (currentX > 0) currentX = 0; // Only allow swiping left
-                        const transformX = Math.max(currentX, -maxSwipe);
-                        element.style.transform = `translateX(${transformX}px)`;
-                    };
-
-                    const handleEnd = () => {
-                        if (!isDragging) return;
-                        isDragging = false;
-                        element.classList.remove('swiping');
-                        element.style.transform = (currentX < -maxSwipe / 2) ? `translateX(-${maxSwipe}px)` : 'translateX(0px)';
-                        document.removeEventListener('mousemove', handleMove);
-                        document.removeEventListener('mouseup', handleEnd);
-                        document.removeEventListener('touchmove', handleMove);
-                        document.removeEventListener('touchend', handleEnd);
-                    };
-
-                    const handleStart = (e) => {
-                        if (e.type === 'mousedown' && e.button !== 0) return;
-                        isDragging = true;
-                        startX = e.type.startsWith('touch') ? e.touches[0].clientX : e.clientX;
-                        element.classList.add('swiping');
-                        document.addEventListener('mousemove', handleMove);
-                        document.addEventListener('mouseup', handleEnd);
-                        document.addEventListener('touchmove', handleMove);
-                        document.addEventListener('touchend', handleEnd);
-                    };
-
-                    element.addEventListener('mousedown', handleStart);
-                    element.addEventListener('touchstart', handleStart, { passive: true });
-                });
-            }
-            
-            /**
-            * Sets up the delete functionality using event delegation.
-            * Calls the provided callback to update the application state.
-            */
-            initDelete() {
-                document.body.addEventListener('click', (e) => {
-                    // Use .closest() on the event target to handle clicks on the icon inside the button
-                    const deleteButton = e.target.closest('.delete');
-                    if (!deleteButton) return;
-                    
-                    const swipeableItem = e.target.closest('.swipeable');
-                    if (!swipeableItem) return;
-
-                    const index = parseInt(swipeableItem.dataset.index, 10);
-
-                    if (this.onDeleteCallback && !isNaN(index)) {
-                        this.onDeleteCallback(index);
-                    }
-
-                    swipeableItem.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-                    swipeableItem.style.opacity = '0';
-                    swipeableItem.style.transform = 'translateX(100%)';
-
-                    setTimeout(() => {
-                        swipeableItem.remove();
-                    }, 300);
-                });
-            }
-        }
-
-            
             // ======================
             // PRINTER MANAGEMENT
             // ======================
@@ -531,16 +361,14 @@
 
                 attachEventListeners() {
                     this.noteForm.addEventListener('submit', (e) => this.handleSubmit(e));
-                    this.noteTextEl.addEventListener('input', () => this.updateCharCounter());
-                    this.noteTextEl.addEventListener('keydown', (e) => {
-                        if (e.key === 'Enter' && !e.shiftKey && this.noteTextEl.value.trim()) {
-                            e.preventDefault();
-                            this.handleSubmit(e);
-                        }
-                    });
-                    
-                    
-                    this.connectBtn.addEventListener('click', () => this.connectAndPrint());
+                        this.noteTextEl.addEventListener('input', () => this.updateCharCounter());
+                        this.noteTextEl.addEventListener('keydown', (e) => {
+                            if (e.key === 'Enter' && !e.shiftKey && this.noteTextEl.value.trim()) {
+                                e.preventDefault();
+                                this.handleSubmit(e);
+                            }
+                        });
+                        this.connectBtn.addEventListener('click', () => this.connectAndPrint());
                 }
                 
                 saveNotes() {
@@ -609,45 +437,23 @@
                     if (length > 159) this.charCounterEl.classList.add('warning');
                 }
 
-                /**
-                * Handles the logic for deleting a note from the data source.
-                */
-                deleteNote(index) {
-                    if (index > -1 && index < this.notes.length) {
-                        this.notes.splice(index, 1); // Remove note from the array
-                        this.saveNotes(); // Update localStorage
-                        this.notesCountEl.textContent = this.notes.length; // Update the count immediately
-
-                        if (this.notes.length === 0) {
-                            this.notesListEl.innerHTML = '<div class="empty-state">No notes cached</div>';
-                        }
-                    }
-                }
-
-
                 updateUI() {
                     this.notesCountEl.textContent = this.notes.length;
+                    
                     if (this.notes.length === 0) {
                         this.notesListEl.innerHTML = '<div class="empty-state">No notes cached</div>';
                     } else {
-                        // Note the addition of the 'index' parameter and 'data-index' attribute
-                        this.notesListEl.innerHTML = this.notes.map((note, index) => {
+                        this.notesListEl.innerHTML = this.notes.map(note => {
+                            // Display the new, formatted timestamp in the UI
                             const displayTimestamp = `${note.day.trim()} ${note.timestamp} at ${note.localtime}`;
                             return `
-                                <article class="swipeable" data-index="${index}">
-                                    <div class="note-inner">
-                                        <div class="note-message2">${this.escapeHtml(note.message)}</div>
-                                        <div class="note-icon"></div>
-                                    </div>
-                                    <div class="action-button delete">
-                                        <span class="action-button-text">X</span>
-                                    </div>
-                                </article>
+                                <div class="note-item">
+                                    <div class="note-message">${this.escapeHtml(note.message)}</div>
+                                    <div class="note-timestamp">${displayTimestamp}</div>
+                                </div>
                             `;
                         }).join('');
                     }
-                    // dispatch a custom event to notify other components that the UI has been updated.
-                    this.notesListEl.dispatchEvent(new CustomEvent('notesUpdated'));
                 }
 
                 escapeHtml(text) {
@@ -750,10 +556,7 @@
             }
 
             document.addEventListener('DOMContentLoaded', () => {
-                const notePrinter = new NotePrinter();
-                new SwipeFunctionality(notePrinter.deleteNote.bind(notePrinter));
-                //new NotePrinter();
-                //new SwipeFunctionality(); 
+                new NotePrinter();
             });
 
             if ('serviceWorker' in navigator) {
@@ -764,8 +567,6 @@
                     .catch(error => console.log('ServiceWorker registration failed:', error));
                 });
             }
-        
         </script>
     </body>
 </html>
-
