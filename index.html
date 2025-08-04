@@ -87,6 +87,7 @@
         }
         .form-group {
             margin-bottom: 0px;
+            padding: 0px 10px 0px 10px;
         }
         label { 
             display: block; margin-bottom: 0px;
@@ -96,11 +97,15 @@
             color: var(--color-1)
         }
         textarea {
+            /*
             border: solid var(--color-2);
             border-width: 3px 10px 0px 10px;
+            */
+            border: none;
+            margin: 0px 10px 0px 10px;
             background-color: transparent;
             color: var(--color-1);
-            width: 100%; min-height: 120px; padding: 10px;
+            width: 280px; min-height: 120px; padding: 10px;
             resize: none;
             font-size: 14px; font-family: inherit;
         }
@@ -108,13 +113,16 @@
             color: transparent;
         }
         textarea:focus::placeholder {background-image: none;}
-        textarea:focus { outline: none; border-color: var(color-1); }
-            .char-counter { text-align: right; font-size: 14px; margin-top: 0px;
+        textarea:focus { outline: none; }
+            .char-counter { text-align: right; font-size: 14px;
                 padding: 3px 10px 3px 0px;
+                margin: 0px 10px 0px 10px;
                 background-color: transparent;
                 color: var(--color-1);
+                /*
                 border: solid var(--color-2);
                 border-width: 0px 10px 0px 10px;
+                */
             }
             .char-counter.caution { color: var(--caution); }
             .char-counter.warning { color: var(--warning); 
