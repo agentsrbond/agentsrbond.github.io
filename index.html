@@ -20,6 +20,7 @@
             --color-2m: #BEC2C5;
             
             --warning: #CC0000;  
+            --warning2: #261A20;  
             --caution: #b37e0c;
             --thinking: #3465A4;
             --transparent: #32353c21;
@@ -33,6 +34,7 @@
             --color-2m: #32353C;
 
             --warning: #CC0000;  
+            --warning2: #261A20;  
             --caution: #FFC90A;
             --thinking: #3465A4;
             --transparent: #BEC2C521;
@@ -47,6 +49,7 @@
             justify-content: center;
             font-family: "Hack", monospace;
             margin: 0;
+            padding-top: 1.5rem;
             min-height: 100vh;
             background-color: var(--color-2);
             color: var(--color-2);
@@ -89,7 +92,7 @@
             padding: 0.45rem 0.25rem;
             border: none;
             background-color: transparent;
-            color: var(--color-1);
+            color: var(--color-1m);
             min-height: 120px;
             resize: none;
             font-size: 14px; font-family: inherit;
@@ -167,18 +170,20 @@
         .note-delete {
             text-align: center;
             display: flex; align-items: center;
-            width: 10%; margin: 0;
+            width: 12%; margin: 0;
+            font-weight: 700; font-size: 15px;
+            font-family: Arial, Helvetica, sans-serif;
             color: var(--color-1m);
             background: repeating-linear-gradient(45deg, var(--color-1) 0px, var(--color-1) 1px, var(--color-1m) 1px, var(--color-1m) 2px) 0% 0% / 2px 2px;
             background: repeating-linear-gradient(45deg, var(--color-2) 0px, var(--color-2) 1px, var(--color-2m) 1px, var(--color-2m) 2px) 0% 0% / 2px 2px;
-            border: 2px dotted var(--color-2m);
+            background: var(--color-2m);
         }
         .note-delete-ico {
             width: 100%; margin: 0;
         }
         .note-item {
-            width: 90%; margin: 0;
-            padding: 0.15rem .45rem 0.15rem .45rem;
+            width: 88%; margin: 0;
+            padding: 0.4rem .45rem 0.4rem .45rem;
             background: repeating-linear-gradient(45deg, var(--color-2) 0px, var(--color-2) 1px, var(--color-2m) 1px, var(--color-2m) 2px) 0% 0% / 2px 2px;
         }
         .note-message {
@@ -195,7 +200,6 @@
             padding: 0.15rem .45rem 0.15rem .45rem;
             font-weight: 500; font-size: 12px;
             color: var(--color-1m);
-            background: repeating-linear-gradient(45deg, var(--color-2) 0px, var(--color-2) 1px, var(--color-2m) 1px, var(--color-2m) 2px) 0% 0% / 2px 2px;
         }
 
         .status-header {
@@ -204,7 +208,7 @@
             align-self: flex-end;
             align-items: center;
             justify-content: space-between; 
-            margin: 2rem 0 0 0;
+            margin: 6rem 0 0 0;
             padding: 0;
             flex-direction: row;
             width: 85vw; max-width: 600px;
@@ -223,13 +227,13 @@
             justify-content: center;
         }
         .status-header .disconnected {
-            color: var(--warning);
+            color: var(--color-1m);
         }
         .status-header .scanning {
             color: var(--caution);
         }
         .status-header .connected {
-            color: var(--color-1);
+            color: var(--color-1m);
         }
         .status-header .sending {
             color: var(--thinking);
@@ -267,7 +271,7 @@
     </head>
     <body>
 
-        <div class="container">
+        <div class="container animate-fade-in">
 
             <div class="header">
                 <h1 id="theme-toggle">Life Receipt</h1>
@@ -298,7 +302,7 @@
                 </div>
                 <div id="notesList"></div>
             </div>
-            <div class="status-header">
+            <div class="status-header animate-fade-in">
                 <button id="status" class="status">Scanning for device...</button>
                 <button class="status-action" id="connectBtn">Connect</button>
             </div>
@@ -386,14 +390,16 @@
                 handleSubmit(e) {
                     e.preventDefault();
                     // trim and remove newline characters
-                    const text = (this.noteTextEl.value.trim().replace(/[\r\n]+/g, ' ') + "\n" );
+                    const temp = (this.noteTextEl.value.trim().replace(/[\r\n]+/g, ' ') );
+
+                    if (!temp) return;
                     
-                    if (!text) return;
-                    
-                    if (text.length > 160) {
+                    if (temp.length > 160) {
                         alert('Note exceeds 160 characters');
                         return;
                     }
+
+                    const text = temp + "\n";
 
                     // create a new Date object to format
                     const now = new Date();
@@ -472,7 +478,7 @@
                             return `
                                 <div class="note-wrapper">
                                     <div class="note-delete" data-note-index="${index}">
-                                        <div class="note-delete-ico">X</div>
+                                        <div class="note-delete-ico">x</div>
                                     </div>
                                     <div class="note-item">
                                         <div class="note-message">${this.escapeHtml(note.message)}</div>
@@ -598,4 +604,3 @@
         </script>
     </body>
 </html>
-
