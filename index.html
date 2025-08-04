@@ -6,6 +6,8 @@
         <title>Life Receipt</title>
         <link rel="manifest" href="manifest.json">
         <link rel="icon" href="icons/icon-192x192.png">
+
+        <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
         
         <meta name="theme-color" content="#191C23">
 <style>
@@ -247,6 +249,20 @@
             background: var(--color-2m);
             color: var(--color-1);
         }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            }
+
+            .animate-fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+            }
     </style>
     </head>
     <body>
@@ -407,6 +423,12 @@
                         localtime: localtime,
                         day: day
                     };
+
+                    confetti({
+                        particleCount: 50,
+                        spread: 100,
+                        origin: { y: 0.7 },
+                    });
 
                     this.notes.push(note);
                     this.saveNotes(); // Save notes to localStorage
@@ -576,4 +598,3 @@
         </script>
     </body>
 </html>
-
