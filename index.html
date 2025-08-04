@@ -392,9 +392,9 @@
                     // trim and remove newline characters
                     const text = (this.noteTextEl.value.trim().replace(/[\r\n]+/g, ' ') );
 
-                    if (!temp) return;
+                    if (!text) return;
                     
-                    if (temp.length > 160) {
+                    if (text.length > 160) {
                         alert('Note exceeds 160 characters');
                         return;
                     }
@@ -603,4 +603,5 @@
         </script>
     </body>
 </html>
+
 
