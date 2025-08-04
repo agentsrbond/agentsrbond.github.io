@@ -1,400 +1,558 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Life Receipt</title>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Life Receipt</title>
 
-    <link rel="manifest" href="manifest.json">
+        <link rel="manifest" href="manifest.json">
 
-    <link rel="icon" href="icons/icon-192x192.png">
-    
-    <meta name="theme-color" content="#4b7688">
-    <style>
+        <link rel="icon" href="icons/icon-192x192.png">
+        
+        <meta name="theme-color" content="#4b7688">
+<style>
         :root {
             /* light mode colors */
-            --bg-primary: #d9d9d9;            /* Main background (mid-light grey) */
-            --bg-secondary: #f0f0f0;          /* Lighter panels/cards */
-            --text-primary: #1a1a1a;          /* Almost black, highly legible */
-            --text-secondary: #4d4d4d;        /* Subtle grey for secondary text */
-            --text-muted: #7a7a7a;            /* For placeholders or disabled text */
-            --border-color: #bfbfbf;          /* Light grey for dividers and outlines */
-            --border-focus: #8c8c8c;          /* Noticeable grey on focus */
-            --button-bg: #e0e0e0;             /* Neutral button background */
-            --button-bg-hover: #cfcfcf;       /* Slightly darker hover state */
-            --button-text: #1a1a1a;           /* Button text stays very dark */
-            --shadow: rgba(0, 0, 0, 0.08);    /* Soft depth */
-            --placeholder: #999999;           /* Input placeholders */
-            --warning: #333333;  
+            --color-1: #1B2026;
+            --color-1m: #3C4147;
+
+            --color-2: #E0E4E7;
+            --color-2m: #BEC2C5;
+            
+            --warning: #CC0000;  
+            --caution: #b37e0c;
+            --thinking: #3465A4;
+            /* 
+            light mode colors
+            --color-1: #e5e5e5;
+            --color-2: #1e1e20;
+
+            --caution: #CC0000;  
+            --warning: #FFC90A;
+
+            dark mode colors
+            --color-1: #1e1e20;
+            --color-2: #e5e5e5;
+
+            --caution: #CC0000;  
+            --warning: #FFC90A;
+            */
         }
         [data-theme="dark"] {
             /* dark mode colors */
-            --bg-primary: #1e1e20;             /* Background of main content */
-            --bg-secondary: #2a2b32;          /* Slightly lighter background for cards, modals */
-            --text-primary: #e5e5e5;          /* Main text color */
-            --text-secondary: #a1a1aa;        /* Less prominent text (like timestamps or metadata) */
-            --text-muted: #6b7280;            /* Even more muted, like placeholders */
-            --border-color: #3f3f46;          /* Default border color */
-            --border-focus: #8b8b8b;          /* Border color for focused inputs */
-            --button-bg: #3e3e47;             /* Background for buttons */
-            --button-bg-hover: #4b4b55;       /* Hovered state for buttons */
-            --button-text: #f1f5f9;           /* Text on buttons */
-            --shadow: rgba(0, 0, 0, 0.6);     /* Deeper shadows for dark background */
-            --placeholder: #6b7280;           /* Placeholder text in inputs */
-            --warning: #f87171;  
+            --color-1: #E0E4E7;
+            --color-1m: #BEC2C5;
+
+            --color-2: #1B2026;
+            --color-2m: #3C4147;
+
+            --warning: #CC0000;  
+            --caution: #FFC90A;
+            --thinking: #3465A4;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * {
+            box-sizing: border-box;
+            margin: 0; padding: 0;
+        }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg-primary);
+            overflow-x: hidden;
             min-height: 100vh;
-            padding: 20px;
-            color: var(--text-primary);
+            margin: 0;
+            padding: 0;
+            font-family: "Hack", monospace;
+            background-color: var(--color-2);
+            color: var(--color-2);
+            padding-bottom: 100px;
         }
         .container {
-            max-width: 600px; margin: 0 auto; background: var(--bg-secondary);
-            border-radius: 6px; padding: 30px; box-shadow: 0 20px 40px var(--shadow);
-            border: 1px solid var(--border-color);
+            padding: 24px 20px;
         }
-        .header { text-align: center; margin-bottom: 30px; }
-        h1 { color: var(--text-primary); font-size: 2.5em; font-weight: 300; margin-bottom: 10px; }
-        .status {
-            padding: 12px 20px; border-radius: 4px; font-weight: 500;
-            text-align: center; transition: all 0.3s ease; background: var(--bg-primary);
-            border: 1px solid var(--border-color);
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
         }
-        .status.disconnected { color: var(--warning); }
-        .status.scanning { color: #f59e0b; }
-        .status.connected { color: #10b981; }
-        .status.sending { color: #3b82f6; }
-        .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-weight: 500; color: var(--text-secondary); }
+        h1 {
+            text-transform: uppercase;
+            padding: 4px 2px;
+            padding: 0px 2px 0px 2px;
+            margin: 0px 18px 0px 18px;
+            border-bottom: 2px dashed var(--color-1);
+            padding-top: 10px;
+            padding-bottom: 2px;
+            background-color: var(--color-2);
+            color: var(--color-1m)
+        }
+        .screen {
+            background: repeating-radial-gradient(circle at 100% center, var(--color-2), var(--color-2) 1px, var(--color-2m) 1px, var(--color-2m) 2px);
+        }
+        .form-group {
+            margin-bottom: 0px;
+        }
+        label { 
+            display: block; margin-bottom: 0px;
+            font-weight: 500; font-size: 14px;
+            padding: 0px 10px 4px 20px;
+            background-color: var(--color-2);
+            color: var(--color-1)
+        }
         textarea {
-            width: 100%; min-height: 120px; padding: 15px; border: 2px solid var(--border-color);
-            border-radius: 4px; font-size: 16px; font-family: inherit; resize: vertical;
-            transition: border-color 0.3s ease; background: var(--bg-primary); color: var(--text-primary);
+            border: solid var(--color-2);
+            border-width: 3px 10px 0px 10px;
+            background-color: transparent;
+            color: var(--color-1);
+            width: 100%; min-height: 120px; padding: 10px;
+            resize: none;
+            font-size: 14px; font-family: inherit;
         }
-        textarea::placeholder { color: var(--placeholder); }
-        textarea:focus { outline: none; border-color: var(--border-focus); }
-        .char-counter { text-align: right; font-size: 14px; color: var(--text-muted); margin-top: 5px; }
-        .char-counter.warning { color: #f59e0b; }
-        .char-counter.error { color: var(--warning); }
+        textarea::placeholder {
+            color: transparent;
+        }
+        textarea:focus::placeholder {background-image: none;}
+        textarea:focus { outline: none; border-color: var(color-1); }
+            .char-counter { text-align: right; font-size: 14px; margin-top: 0px;
+                padding: 3px 10px 3px 0px;
+                background-color: transparent;
+                color: var(--color-1);
+                border: solid var(--color-2);
+                border-width: 0px 10px 0px 10px;
+            }
+            .char-counter.caution { color: var(--caution); }
+            .char-counter.warning { color: var(--warning); 
+        }
         button {
-            background: var(--button-bg); color: var(--button-text); border: none; padding: 15px 30px;
-            border-radius: 4px; font-size: 16px; font-weight: 500; cursor: pointer;
-            transition: all 0.3s ease; width: 100%;
+            background-color: transparent;
+            border: none;
+            margin: 0;
+            padding: 0;
+            text-align: inherit;
+            font: inherit;
+            border-radius: 0;
+            appearance: none;
         }
-        button:hover:not(:disabled) { background: var(--button-bg-hover); transform: translateY(-2px); box-shadow: 0 8px 20px var(--shadow); }
-        button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-        .notes-list { margin-top: 30px; }
-        .notes-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .notes-header h3 { color: var(--text-primary); }
+        .btn-wrapper {
+            display: flex; justify-content: center; align-items: center;
+            width: 100%;
+            background-color: var(--color-2);
+        }
+        .btn-con {
+            flex: 0 0 40%;
+            text-align: center;
+            width: 50%;
+            font-weight: 500; font-size: 14px;
+            padding: 10px 10px 10px 10px;
+            margin: 26px 10px 26px 10px;
+            background-color: var(--color-2);
+            color: var(--color-1);
+            border: 2px dashed var(--color-1);
+        }
+        .btn-con:hover {
+            background-color: var(--color-2m);
+            color: var(--color-1)
+        }
+        .btn-soft {
+            flex: 0 0 40%;
+            text-align: center;
+            width: 50%;
+            font-weight: 500; font-size: 14px;
+            padding: 10px 10px 10px 10px;
+            margin: 26px 10px 26px 10px;
+            background-color: var(--color-2);
+            color: var(--color-1);
+            border: 2px dashed var(--color-1);
+        }
+        .btn-soft:hover {
+            background-color: var(--color-2m);
+            color: var(--color-1)
+        }
+        .notes-list {
+            background-color: var(--color-2);
+            color: var(--color-1);
+        }
+        .notes-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0px 2px 6px 2px;
+            margin: 0px 18px 0px 18px;
+            background-color: var(--color-2);
+            color: var(--color-1);
+            border-bottom: 2px dashed var(--color-1);
+        } .notes-header h3 {
+            font-weight: 500; font-size: 14px;
+        }
         .notes-count {
-            background: var(--bg-primary); color: var(--text-primary); padding: 4px 12px;
-            border-radius: 20px; font-size: 14px; font-weight: 500; border: 1px solid var(--border-color);
+            font-weight: 500; font-size: 14px;
         }
-
-        .status-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .status-text { flex: 0 0 70%; padding: 12px 20px; }
-        .status-action { flex: 0 0 30%; display: flex; align-items: center; justify-content: center; padding: 12px 20px; }
-        
-        .note-item { background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 4px; padding: 15px; margin-bottom: 10px; animation: slideIn 0.3s ease; }
-        .note-message { font-size: 16px; margin-bottom: 8px; line-height: 1.4; color: var(--text-primary); word-wrap: break-word; }
-        .note-timestamp { font-size: 12px; color: var(--text-muted); font-style: italic; }
-        .empty-state { text-align: center; color: var(--text-muted); font-style: italic; padding: 40px 20px; }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-        .pulse { animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
-        @media (max-width: 480px) {
-            .container { margin: 10px; padding: 20px; }
-            h1 { font-size: 2em; }
+        .note-item {
+            padding: 6px 2px 6px 2px;
+            margin: 6px 18px 8px 18px;
+            
+            background: repeating-linear-gradient(45deg, var(--color-2) 0px, var(--color-2) 1px, var(--color-2m) 1px, var(--color-2m) 2px) 0% 0% / 2px 2px;
+        }
+        .note-message {
+            font-weight: 500; font-size: 14px;
+            color: var(--color-1m);
+        }
+        .note-timestamp {
+            font-style: italic;
+            font-weight: 500; font-size: 12px;
+            color: var(--color-1m);
+        }
+        .empty-state {
+            padding: 6px 2px 6px 2px;
+            margin: 0px 18px 0px 18px;
+            font-weight: 500; font-size: 12px;
+            color: var(--color-1m);
+        }
+        .status-header {
+            position: fixed;
+            left: 0;
+            bottom: 0px;
+            padding-bottom: 30px;
+            width: 100%;
+            height: 70px;
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            z-index: 1000;
+            background-color: var(--color-2);
+        }
+        .status {
+            margin: 0px 6px 0px 12px;
+            height: 40px;
+            flex: 0 0 65%;
+            background-color: var(--color-2m);
+            color: var(--color-1);
+            font-weight: 500; font-size: 12px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .status-header .disconnected {
+            color: var(--warning);
+        }
+        .status-header .scanning {
+            color: var(--caution);
+        }
+        .status-header .connected {
+            color: var(--color-1);
+        }
+        .status-header .sending {
+            color: var(--thinking);
+        }
+        .status-action {
+            margin: 0px 12px 0px 6px;
+            height: 40px;
+            flex: 0 0 25%;
+            font-weight: 500; font-size: 12px;
+            text-align: center;
+            padding: 10px 10px 10px 10px;
+            background-color: var(--color-2);
+            color: var(--color-1);
+            border: 2px dashed var(--color-1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .status-action:hover {
+            background-color: var(--color-2m);
+            color: var(--color-1);
         }
     </style>
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1 id="theme-toggle">Life Receipt</h1>
-        </div>
+    </head>
+    <body>
 
+        <div class="container">
+
+            <div class="header">
+                <h1 id="theme-toggle">Life Receipt</h1>
+            </div>
+
+            <form id="noteForm">
+                <div class="form-group">
+                    <label for="noteText">Type your receipt...</label>
+                    <div class="screen">
+                        <textarea 
+                            id="noteText" 
+                            type="text"
+                            placeholder="<"
+                            maxlength="160"
+                        ></textarea>
+                        <div id="charCounter" class="char-counter">0/160</div>
+                    </div>
+                </div>
+                <div class="btn-wrapper">
+                    <button class="btn-soft" type="submit">Save Receipt</button>
+                </div>
+            </form>
+
+            <div class="notes-list">
+                <div class="notes-header">
+                    <h3>Cached Notes</h3>
+                    <span id="notesCount" class="notes-count">0</span>
+                </div>
+                <div id="notesList"></div>
+            </div>
+
+        </div>
         <div class="status-header">
-            <div id="status" class="status status-text">🔗 Scanning for ESP32...</div>
-            <button class="status-action" id="connectBtn">Connect</button>
-        </div>
-
-        <form id="noteForm">
-            <div class="form-group">
-                <label for="noteText">Write your note:</label>
-                <textarea 
-                    id="noteText" 
-                    placeholder="Enter your note here..."
-                    maxlength="280"
-                ></textarea>
-                <div id="charCounter" class="char-counter">0/280</div>
+                <button id="status" class="status">Scanning for device...</button>
+                <button class="status-action" id="connectBtn">Connect</button>
             </div>
-            <button type="submit">📄 Add Note</button>
-        </form>
-
-        <div class="notes-list">
-            <div class="notes-header">
-                <h3>Cached Notes</h3>
-                <span id="notesCount" class="notes-count">0</span>
-            </div>
-            <div id="notesList"></div>
-        </div>
-
-    </div>
-
-    <script>
-        // theme management
-    const themeToggle = document.getElementById('theme-toggle');
-    const html = document.documentElement;
-    
-    // check for saved theme preference or default to light mode
-    const currentTheme = localStorage.getItem('theme') || 'light';
-    html.setAttribute('data-theme', currentTheme);
-    
-    function toggleTheme() {
-      const currentTheme = html.getAttribute('data-theme');
-      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-      
-      html.setAttribute('data-theme', newTheme);
-      localStorage.setItem('theme', newTheme);
-    }
-    
-    themeToggle.addEventListener('click', toggleTheme);
-
-    class NotePrinter {
-        constructor() {
-            // Load notes from localStorage for persistence
-            this.notes = JSON.parse(localStorage.getItem('cachedNotes')) || [];
-            this.device = null;
-            this.characteristic = null;
-            this.isConnected = false;
-            this.isScanning = false;
-            this.scanInterval = null;
-            
-            // ESP32 Bluetooth service UUID
-            this.serviceUUID = '12345678-1234-1234-1234-123456789abc';
-            this.characteristicUUID = '87654321-4321-4321-4321-cba987654321';
-            
-            this.initializeElements();
-            this.attachEventListeners();
-            this.updateUI();
-            this.updateStatus('Ready to connect', 'disconnected'); // Initial state
-        }
-
-        initializeElements() {
-            this.statusEl = document.getElementById('status');
-            this.noteForm = document.getElementById('noteForm');
-            this.noteTextEl = document.getElementById('noteText');
-            this.charCounterEl = document.getElementById('charCounter');
-            this.notesListEl = document.getElementById('notesList');
-            this.notesCountEl = document.getElementById('notesCount');
-            this.connectBtn = document.getElementById('connectBtn');
-        }
-
-        attachEventListeners() {
-            this.noteForm.addEventListener('submit', (e) => this.handleSubmit(e));
-            this.noteTextEl.addEventListener('input', () => this.updateCharCounter());
-            this.connectBtn.addEventListener('click', () => this.connectAndPrint());
-        }
         
-        saveNotes() {
-            localStorage.setItem('cachedNotes', JSON.stringify(this.notes));
-        }
+        <script>
+            // ======================
+            // THEME MANAGEMENT
+            // ======================
+            const themeToggle = document.getElementById('theme-toggle');
+            const html = document.documentElement;
+            
+            const currentTheme = localStorage.getItem('theme') || 'light'; // check for saved theme
+            html.setAttribute('data-theme', currentTheme);
+            
+            function toggleTheme() {
+                const currentTheme = html.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                html.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+            }
+            themeToggle.addEventListener('click', toggleTheme);
 
-        handleSubmit(e) {
-            e.preventDefault();
-            const text = this.noteTextEl.value.trim();
-            
-            if (!text) return;
-            
-            if (text.length > 280) {
-                alert('Note exceeds 280 characters');
-                return;
+
+            // ======================
+            // PRINTER MANAGEMENT
+            // ======================
+            class NotePrinter {
+                constructor() {
+                    // load notes from localStorage
+                    this.notes = JSON.parse(localStorage.getItem('cachedNotes')) || [];
+                    this.device = null;
+                    this.characteristic = null;
+                    this.isConnected = false;
+                    this.isScanning = false;
+                    this.scanInterval = null;
+                    
+                    // ESP32 Bluetooth service UUID
+                    this.serviceUUID = '12345678-1234-1234-1234-123456789abc';
+                    this.characteristicUUID = '87654321-4321-4321-4321-cba987654321';
+                    
+                    this.initializeElements();
+                    this.attachEventListeners();
+                    this.updateUI();
+                    this.updateStatus('Ready to connect', 'disconnected'); // initial state
+                }
+
+                initializeElements() {
+                    this.noteForm = document.getElementById('noteForm');
+                    this.noteTextEl = document.getElementById('noteText');
+                    this.charCounterEl = document.getElementById('charCounter');
+                    this.notesListEl = document.getElementById('notesList');
+                    this.notesCountEl = document.getElementById('notesCount');
+                    this.connectBtn = document.getElementById('connectBtn');
+                    this.statusEl = document.getElementById('status');
+                }
+
+                attachEventListeners() {
+                    this.noteForm.addEventListener('submit', (e) => this.handleSubmit(e));
+                    this.noteTextEl.addEventListener('input', () => this.updateCharCounter());
+                    this.connectBtn.addEventListener('click', () => this.connectAndPrint());
+                }
+                
+                saveNotes() {
+                    localStorage.setItem('cachedNotes', JSON.stringify(this.notes));
+                }
+
+                handleSubmit(e) {
+                    e.preventDefault();
+                    // trim and remove newline characters
+                    const text = this.noteTextEl.value.trim().replace(/[\r\n]+/g, ' ');
+                    
+                    if (!text) return;
+                    
+                    if (text.length > 160) {
+                        alert('Note exceeds 160 characters');
+                        return;
+                    }
+
+                    // create a new Date object to format
+                    const now = new Date();
+                    const timeZone = 'America/New_York'; // Eastern Time
+
+                    // Format YYYY-MM-DD
+                    const year = now.getFullYear();
+                    const month = String(now.getMonth() + 1).padStart(2, '0');
+                    const date = String(now.getDate()).padStart(2, '0');
+                    const formattedDate = `${year}-${month}-${date}`;
+
+                    // Format HH:MM AM/PM
+                    const localtime = now.toLocaleTimeString('en-US', {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: true,
+                        timeZone: timeZone
+                    });
+
+                    // Format abbreviated day
+                    const day = ` ${now.toLocaleDateString('en-US', { weekday: 'short', timeZone: timeZone }).toUpperCase()} `;
+
+                    // Construct the new note object with the specified format
+                    const note = {
+                        message: text,
+                        timestamp: formattedDate,
+                        localtime: localtime,
+                        day: day
+                    };
+
+                    this.notes.push(note);
+                    this.saveNotes(); // Save notes to localStorage
+                    
+                    this.noteTextEl.value = '';
+                    this.updateCharCounter();
+                    this.updateUI();
+                    
+                    if (this.isConnected) {
+                        this.sendNotes();
+                    }
+                }
+
+                updateCharCounter() {
+                    const length = this.noteTextEl.value.length;
+                    this.charCounterEl.textContent = `${length}/160`;
+                    
+                    this.charCounterEl.className = 'char-counter';
+                    if (length > 148) this.charCounterEl.classList.add('caution');
+                    if (length > 159) this.charCounterEl.classList.add('warning');
+                }
+
+                updateUI() {
+                    this.notesCountEl.textContent = this.notes.length;
+                    
+                    if (this.notes.length === 0) {
+                        this.notesListEl.innerHTML = '<div class="empty-state">No notes cached</div>';
+                    } else {
+                        this.notesListEl.innerHTML = this.notes.map(note => {
+                            // Display the new, formatted timestamp in the UI
+                            const displayTimestamp = `${note.day.trim()} ${note.timestamp} at ${note.localtime}`;
+                            return `
+                                <div class="note-item">
+                                    <div class="note-message">${this.escapeHtml(note.message)}</div>
+                                    <div class="note-timestamp">${displayTimestamp}</div>
+                                </div>
+                            `;
+                        }).join('');
+                    }
+                }
+
+                escapeHtml(text) {
+                    const div = document.createElement('div');
+                    div.textContent = text;
+                    return div.innerHTML;
+                }
+
+                async connectAndPrint() {
+                    if (!navigator.bluetooth) {
+                        this.updateStatus('Bluetooth not supported', 'disconnected');
+                        return;
+                    }
+                    if (this.isConnected) {
+                        console.log('Already connected.');
+                        return;
+                    }
+                    
+                    if (this.notes.length === 0) {
+                        alert('No notes to print!');
+                        return;
+                    }
+
+                    try {
+                        this.updateStatus('Requesting device...', 'scanning');
+                        this.device = await navigator.bluetooth.requestDevice({
+                            filters: [{ services: [this.serviceUUID] }],
+                            optionalServices: [this.serviceUUID]
+                        });
+
+                        this.updateStatus('Connecting to device...', 'scanning');
+                        this.device.addEventListener('gattserverdisconnected', () => this.handleDisconnection());
+                        const server = await this.device.gatt.connect();
+                        
+                        const service = await server.getPrimaryService(this.serviceUUID);
+                        this.characteristic = await service.getCharacteristic(this.characteristicUUID);
+                        
+                        this.isConnected = true;
+                        this.updateStatus('Connected to device', 'connected');
+
+                        // connection is successful, now send the notes
+                        await this.sendNotes();
+
+                    } catch (error) {
+                        console.error('Connection failed:', error);
+                        this.updateStatus(`Error: ${error.message}`, 'disconnected');
+                        this.isConnected = false;
+                    }
+                }
+
+                async sendNotes() {
+                    if (!this.isConnected || this.notes.length === 0) return;
+
+                    try {
+                        this.updateStatus(`Sending ${this.notes.length} note(s)...`, 'sending');
+                        
+                        const notesJson = JSON.stringify(this.notes);
+                        const payload = notesJson + '\n'; // Append the newline character
+                        const encoder = new TextEncoder();
+                        const data = encoder.encode(payload);
+
+                        // A robust implementation should chunk the data if it exceeds the MTU size.
+                        // For simplicity, we assume notes fit in one write.
+                        await this.characteristic.writeValue(data);
+                        
+                        this.updateStatus('Notes sent. Waiting for confirmation...', 'sending');
+                        
+                        // The ESP32 will disconnect upon success, triggering `handleDisconnection`.
+                        // We set a flag to know it was a successful disconnect.
+                        this.successfulPrint = true; 
+
+                    } catch (error) {
+                        console.error('Send failed:', error);
+                        this.updateStatus('Failed to send notes', 'disconnected');
+                        this.isConnected = false;
+                    }
+                }
+
+                handleDisconnection() {
+                    // This function is now our acknowledgment handler.
+                    this.isConnected = false;
+                    this.device = null;
+                    this.characteristic = null;
+
+                    if (this.successfulPrint) {
+                        this.updateStatus('Print successful!', 'connected');
+                        this.notes = []; // Clear notes ONLY on successful acknowledgment
+                        this.saveNotes();
+                        this.updateUI();
+                        this.successfulPrint = false; // Reset flag
+                    } else {
+                        this.updateStatus('Disconnected. Notes saved.', 'disconnected');
+                    }
+                }
+
+                updateStatus(message, className) {
+                    this.statusEl.textContent = message;
+                    this.statusEl.className = `status ${className}`;
+                }
             }
 
-            // Create a new Date object to format
-            const now = new Date();
-            const timeZone = 'America/New_York'; // Eastern Time
-
-            // Format YYYY-MM-DD
-            const year = now.getFullYear();
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            const date = String(now.getDate()).padStart(2, '0');
-            const formattedDate = `${year}-${month}-${date}`;
-
-            // Format HH:MM AM/PM
-            const localtime = now.toLocaleTimeString('en-US', {
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: true,
-                timeZone: timeZone
+            document.addEventListener('DOMContentLoaded', () => {
+                new NotePrinter();
             });
 
-            // Format abbreviated day
-            const day = ` ${now.toLocaleDateString('en-US', { weekday: 'short', timeZone: timeZone }).toUpperCase()} `;
-
-            // Construct the new note object with the specified format
-            const note = {
-                message: text,
-                timestamp: formattedDate,
-                localtime: localtime,
-                day: day
-            };
-
-            this.notes.push(note);
-            this.saveNotes(); // Save notes to localStorage
-            
-            this.noteTextEl.value = '';
-            this.updateCharCounter();
-            this.updateUI();
-            
-            if (this.isConnected) {
-                this.sendNotes();
-            }
-        }
-
-        updateCharCounter() {
-            const length = this.noteTextEl.value.length;
-            this.charCounterEl.textContent = `${length}/280`;
-            
-            this.charCounterEl.className = 'char-counter';
-            if (length > 250) this.charCounterEl.classList.add('warning');
-            if (length > 280) this.charCounterEl.classList.add('error');
-        }
-
-        updateUI() {
-            this.notesCountEl.textContent = this.notes.length;
-            
-            if (this.notes.length === 0) {
-                this.notesListEl.innerHTML = '<div class="empty-state">No notes cached</div>';
-            } else {
-                this.notesListEl.innerHTML = this.notes.map(note => {
-                    // Display the new, formatted timestamp in the UI
-                    const displayTimestamp = `${note.day.trim()} ${note.timestamp} at ${note.localtime}`;
-                    return `
-                        <div class="note-item">
-                            <div class="note-message">${this.escapeHtml(note.message)}</div>
-                            <div class="note-timestamp">${displayTimestamp}</div>
-                        </div>
-                    `;
-                }).join('');
-            }
-        }
-
-        escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        async connectAndPrint() {
-            if (!navigator.bluetooth) {
-                this.updateStatus('❌ Bluetooth not supported', 'disconnected');
-                return;
-            }
-            if (this.isConnected) {
-                console.log('Already connected.');
-                return;
-            }
-            
-            if (this.notes.length === 0) {
-                alert('No notes to print!');
-                return;
-            }
-
-            try {
-                this.updateStatus('🔗 Requesting device...', 'scanning');
-                this.device = await navigator.bluetooth.requestDevice({
-                    filters: [{ services: [this.serviceUUID] }],
-                    optionalServices: [this.serviceUUID]
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                    // Point to the external service worker file
+                    navigator.serviceWorker.register('/sw.js')
+                    .then(registration => console.log('ServiceWorker registration successful'))
+                    .catch(error => console.log('ServiceWorker registration failed:', error));
                 });
-
-                this.updateStatus('🔗 Connecting to ESP32...', 'scanning');
-                this.device.addEventListener('gattserverdisconnected', () => this.handleDisconnection());
-                const server = await this.device.gatt.connect();
-                
-                const service = await server.getPrimaryService(this.serviceUUID);
-                this.characteristic = await service.getCharacteristic(this.characteristicUUID);
-                
-                this.isConnected = true;
-                this.updateStatus('✅ Connected to ESP32', 'connected');
-
-                // Connection is successful, now send the notes
-                await this.sendNotes();
-
-            } catch (error) {
-                console.error('Connection failed:', error);
-                this.updateStatus(`❌ Error: ${error.message}`, 'disconnected');
-                this.isConnected = false;
             }
-        }
-
-        async sendNotes() {
-            if (!this.isConnected || this.notes.length === 0) return;
-
-            try {
-                this.updateStatus(`🔗 Sending ${this.notes.length} note(s)...`, 'sending pulse');
-                
-                const notesJson = JSON.stringify(this.notes);
-                const payload = notesJson + '\n'; // Append the newline character
-                const encoder = new TextEncoder();
-                const data = encoder.encode(payload);
-
-                // A robust implementation should chunk the data if it exceeds the MTU size.
-                // For simplicity, we assume notes fit in one write.
-                await this.characteristic.writeValue(data);
-                
-                this.updateStatus('🔗 Notes sent. Waiting for print confirmation...', 'sending');
-                
-                // The ESP32 will disconnect upon success, triggering `handleDisconnection`.
-                // We set a flag to know it was a successful disconnect.
-                this.successfulPrint = true; 
-
-            } catch (error) {
-                console.error('Send failed:', error);
-                this.updateStatus('❌ Failed to send notes', 'disconnected');
-                this.isConnected = false;
-            }
-        }
-
-        handleDisconnection() {
-            // This function is now our acknowledgment handler.
-            this.isConnected = false;
-            this.device = null;
-            this.characteristic = null;
-
-            if (this.successfulPrint) {
-                this.updateStatus('✅ Print successful!', 'connected');
-                this.notes = []; // Clear notes ONLY on successful acknowledgment
-                this.saveNotes();
-                this.updateUI();
-                this.successfulPrint = false; // Reset flag
-            } else {
-                this.updateStatus('🔗 Disconnected. Notes are saved.', 'disconnected pulse');
-            }
-        }
-
-        updateStatus(message, className) {
-            this.statusEl.textContent = message;
-            this.statusEl.className = `status ${className}`;
-        }
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        new NotePrinter();
-    });
-
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            // Point to the external service worker file
-            navigator.serviceWorker.register('/sw.js')
-            .then(registration => console.log('ServiceWorker registration successful'))
-            .catch(error => console.log('ServiceWorker registration failed:', error));
-        });
-    }
-</script>
-</body>
+        </script>
+    </body>
 </html>
