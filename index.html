@@ -4,17 +4,15 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Life Receipt</title>
-
         <link rel="manifest" href="manifest.json">
-
         <link rel="icon" href="icons/icon-192x192.png">
         
-        <meta name="theme-color" content="#4b7688">
+        <meta name="theme-color" content="#191C23">
 <style>
         :root {
             /* light mode colors */
-            --color-1: #1B2026;
-            --color-1m: #3C4147;
+            --color-1: #191C23;
+            --color-1m: #32353C;
 
             --color-2: #E0E4E7;
             --color-2m: #BEC2C5;
@@ -22,20 +20,7 @@
             --warning: #CC0000;  
             --caution: #b37e0c;
             --thinking: #3465A4;
-            /* 
-            light mode colors
-            --color-1: #e5e5e5;
-            --color-2: #1e1e20;
-
-            --caution: #CC0000;  
-            --warning: #FFC90A;
-
-            dark mode colors
-            --color-1: #1e1e20;
-            --color-2: #e5e5e5;
-
-            --caution: #CC0000;  
-            --warning: #FFC90A;
+            --transparent: #32353c21;
             */
         }
         [data-theme="dark"] {
@@ -43,70 +28,68 @@
             --color-1: #E0E4E7;
             --color-1m: #BEC2C5;
 
-            --color-2: #1B2026;
-            --color-2m: #3C4147;
+            --color-2: #191C23;
+            --color-2m: #32353C;
 
             --warning: #CC0000;  
             --caution: #FFC90A;
             --thinking: #3465A4;
+            --transparent: #BEC2C521;
         }
         * {
             box-sizing: border-box;
-            margin: 0; padding: 0;
+            margin: 0 auto; padding: 0;
         }
         body {
             overflow-x: hidden;
-            min-height: 100vh;
-            margin: 0;
-            padding: 0;
+            display: flex;
+            justify-content: center;
             font-family: "Hack", monospace;
+            margin: 0;
+            min-height: 100vh;
             background-color: var(--color-2);
             color: var(--color-2);
-            padding-bottom: 100px;
         }
         .container {
-            padding: 24px 20px;
+            width: 85vw; max-width: 600px;
+            margin: 2rem auto;
         }
         .header {
+            width: 100%; margin: 0; 
             text-align: center;
-            margin-bottom: 24px;
+            background-color: transparent;
+            border-bottom: 2px dashed var(--color-1);
         }
         h1 {
+            padding: .20rem 0;
             text-transform: uppercase;
-            padding: 4px 2px;
-            padding: 0px 2px 0px 2px;
-            margin: 0px 18px 0px 18px;
-            border-bottom: 2px dashed var(--color-1);
-            padding-top: 10px;
-            padding-bottom: 2px;
-            background-color: var(--color-2);
-            color: var(--color-1m)
+            background-color: transparent;
+            color: var(--color-1m);
         }
         .screen {
-            background: repeating-radial-gradient(circle at 100% center, var(--color-2), var(--color-2) 1px, var(--color-2m) 1px, var(--color-2m) 2px);
-            width:280px;
-            margin: 0 auto;
+            display:block;
+            width: 100%; margin: 0;
+            background: repeating-linear-gradient(45deg, var(--color-2) 0px, var(--color-2) 1px, var(--color-2m) 1px, var(--color-2m) 2px) 0% 0% / 2px 2px;
         }
-        .form-group {
-            margin-bottom: 0px;
-            padding: 0px 10px 0px 10px;
+        form {
+            width: 100%; margin: 0;
         }
         label { 
-            display: block; margin-bottom: 0px;
+            display:block;
+            width: 100%;
+            margin: 1rem 0 0.25rem 0.25rem;
             font-weight: 500; font-size: 14px;
-            padding: 0px 10px 4px 20px;
+            color: var(--color-1);
             background-color: var(--color-2);
-            color: var(--color-1)
         }
         textarea {
-            /*
-            border: solid var(--color-2);
-            border-width: 3px 10px 0px 10px;
-            */
+            display:block;
+            width: 100%; margin: 0;
+            padding: 0.45rem 0.25rem;
             border: none;
             background-color: transparent;
             color: var(--color-1);
-            width: 280px; min-height: 120px; padding: 10px;
+            min-height: 120px;
             resize: none;
             font-size: 14px; font-family: inherit;
         }
@@ -116,13 +99,11 @@
         textarea:focus::placeholder {background-image: none;}
         textarea:focus { outline: none; }
             .char-counter { text-align: right; font-size: 14px;
-                padding: 3px 10px 3px 0px;
+                display:block;
+                width: 100%;
+                padding: 0 .45rem 0.45rem 0;
                 background-color: transparent;
                 color: var(--color-1);
-                /*
-                border: solid var(--color-2);
-                border-width: 0px 10px 0px 10px;
-                */
             }
             .char-counter.caution { color: var(--caution); }
             .char-counter.warning { color: var(--warning); 
@@ -139,60 +120,64 @@
         }
         .btn-wrapper {
             display: flex; justify-content: center; align-items: center;
-            width: 100%;
+            width: 100%; 
+            margin: 1.15rem 0 1.15rem 0;
             background-color: var(--color-2);
-        }
-        .btn-con {
-            flex: 0 0 40%;
-            text-align: center;
-            width: 50%;
-            font-weight: 500; font-size: 14px;
-            padding: 10px 10px 10px 10px;
-            margin: 26px 10px 26px 10px;
-            background-color: var(--color-2);
-            color: var(--color-1);
-            border: 2px dashed var(--color-1);
-        }
-        .btn-con:hover {
-            background-color: var(--color-2m);
-            color: var(--color-1)
         }
         .btn-soft {
-            flex: 0 0 40%;
-            text-align: center;
-            width: 50%;
-            font-weight: 500; font-size: 14px;
+            width: 45%;
             padding: 10px 10px 10px 10px;
-            margin: 26px 10px 26px 10px;
-            background-color: var(--color-2);
+            margin: 0px auto;
+            text-align: center;
+            font-weight: 500; font-size: 14px;
             color: var(--color-1);
-            border: 2px dashed var(--color-1);
         }
         .btn-soft:hover {
             background-color: var(--color-2m);
             color: var(--color-1)
         }
         .notes-list {
-            background-color: var(--color-2);
+            width: 100%; margin: 0;
             color: var(--color-1);
+            background-color: transparent;
         }
         .notes-header {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 0px 2px 6px 2px;
-            margin: 0px 18px 0px 18px;
-            background-color: var(--color-2);
+            width: 100%;
+            display: flex; justify-content: space-between;
+            padding: .25rem .45rem;
             color: var(--color-1);
             border-bottom: 2px dashed var(--color-1);
-        } .notes-header h3 {
+        } 
+        .notes-title {
+            text-align: left;
+            width: 50%; margin: 0;
             font-weight: 500; font-size: 14px;
         }
         .notes-count {
+            text-align: right;
+            width: 50%; margin: 0;
             font-weight: 500; font-size: 14px;
         }
+        .note-wrapper {
+            display: flex; justify-content: space-between;
+            width: 100%;
+            margin: .45rem 0 0 0;
+        }
+        .note-delete {
+            text-align: center;
+            display: flex; align-items: center;
+            width: 10%; margin: 0;
+            color: var(--color-1m);
+            background: repeating-linear-gradient(45deg, var(--color-1) 0px, var(--color-1) 1px, var(--color-1m) 1px, var(--color-1m) 2px) 0% 0% / 2px 2px;
+            background: repeating-linear-gradient(45deg, var(--color-2) 0px, var(--color-2) 1px, var(--color-2m) 1px, var(--color-2m) 2px) 0% 0% / 2px 2px;
+            border: 2px dotted var(--color-2m);
+        }
+        .note-delete-ico {
+            width: 100%; margin: 0;
+        }
         .note-item {
-            padding: 6px 2px 6px 2px;
-            margin: 6px 18px 8px 18px;
-            
+            width: 90%; margin: 0;
+            padding: 0.15rem .45rem 0.15rem .45rem;
             background: repeating-linear-gradient(45deg, var(--color-2) 0px, var(--color-2) 1px, var(--color-2m) 1px, var(--color-2m) 2px) 0% 0% / 2px 2px;
         }
         .note-message {
@@ -205,29 +190,30 @@
             color: var(--color-1m);
         }
         .empty-state {
-            padding: 6px 2px 6px 2px;
-            margin: 0px 18px 0px 18px;
+            width: 100%; margin: 0;
+            padding: 0.15rem .45rem 0.15rem .45rem;
             font-weight: 500; font-size: 12px;
             color: var(--color-1m);
+            background: repeating-linear-gradient(45deg, var(--color-2) 0px, var(--color-2) 1px, var(--color-2m) 1px, var(--color-2m) 2px) 0% 0% / 2px 2px;
         }
+
         .status-header {
-            position: fixed;
-            left: 0;
-            bottom: 0px;
-            padding-bottom: 30px;
-            width: 100%;
-            height: 70px;
+            position: sticky;
             display: flex; 
-            justify-content: space-between; 
+            align-self: flex-end;
             align-items: center;
+            justify-content: space-between; 
+            margin: 2rem 0 0 0;
+            padding: 0;
+            flex-direction: row;
+            width: 85vw; max-width: 600px;
             z-index: 1000;
-            background-color: var(--color-2);
         }
         .status {
-            margin: 0px 6px 0px 12px;
             height: 40px;
             flex: 0 0 65%;
             background-color: var(--color-2m);
+            background: repeating-linear-gradient(45deg, var(--color-2) 0px, var(--color-2) 1px, var(--color-2m) 1px, var(--color-2m) 2px) 0% 0% / 2px 2px;
             color: var(--color-1);
             font-weight: 500; font-size: 12px;
             text-align: center;
@@ -248,21 +234,18 @@
             color: var(--thinking);
         }
         .status-action {
-            margin: 0px 12px 0px 6px;
             height: 40px;
             flex: 0 0 25%;
             font-weight: 500; font-size: 12px;
             text-align: center;
-            padding: 10px 10px 10px 10px;
-            background-color: var(--color-2);
+            background: repeating-linear-gradient(45deg, var(--color-2) 0px, var(--color-2) 1px, var(--color-2m) 1px, var(--color-2m) 2px) 0% 0% / 2px 2px;
             color: var(--color-1);
-            border: 2px dashed var(--color-1);
             display: flex;
             align-items: center;
             justify-content: center;
         }
         .status-action:hover {
-            background-color: var(--color-2m);
+            background: var(--color-2m);
             color: var(--color-1);
         }
     </style>
@@ -295,17 +278,16 @@
 
             <div class="notes-list">
                 <div class="notes-header">
-                    <h3>Cached Notes</h3>
+                    <span class="notes-title">Cached Notes</span>
                     <span id="notesCount" class="notes-count">0</span>
                 </div>
                 <div id="notesList"></div>
             </div>
-
-        </div>
-        <div class="status-header">
+            <div class="status-header">
                 <button id="status" class="status">Scanning for device...</button>
                 <button class="status-action" id="connectBtn">Connect</button>
             </div>
+        </div>
         
         <script>
             // ======================
@@ -369,6 +351,17 @@
                             }
                         });
                         this.connectBtn.addEventListener('click', () => this.connectAndPrint());
+                        // Using event delegation on the notes list to handle clicks on delete buttons
+                        this.notesListEl.addEventListener('click', (e) => {
+                        // Use .closest() to check if the clicked element or its parent is a delete button
+                        const deleteButton = e.target.closest('.note-delete');
+                        if (deleteButton) {
+                            const noteIndex = deleteButton.dataset.noteIndex; // Get the index from the data attribute
+                            if (noteIndex !== undefined) {
+                                this.deleteNote(parseInt(noteIndex, 10));
+                            }
+                        }
+                    });
                 }
                 
                 saveNotes() {
@@ -428,6 +421,15 @@
                     }
                 }
 
+                deleteNote(index) {
+                    // Confirm the index is valid
+                    if (index > -1 && index < this.notes.length) {
+                        this.notes.splice(index, 1); // Remove the note from the array
+                        this.saveNotes(); // Update localStorage
+                        this.updateUI(); // Re-render the list in the DOM
+                    }
+                }
+
                 updateCharCounter() {
                     const length = this.noteTextEl.value.length;
                     this.charCounterEl.textContent = `${length}/160`;
@@ -441,15 +443,20 @@
                     this.notesCountEl.textContent = this.notes.length;
                     
                     if (this.notes.length === 0) {
-                        this.notesListEl.innerHTML = '<div class="empty-state">No notes cached</div>';
+                        this.notesListEl.innerHTML = '<div class="note-wrapper"><div class="empty-state">No notes cached</div></div>';
                     } else {
-                        this.notesListEl.innerHTML = this.notes.map(note => {
+                        this.notesListEl.innerHTML = this.notes.map((note, index) => {
                             // Display the new, formatted timestamp in the UI
                             const displayTimestamp = `${note.day.trim()} ${note.timestamp} at ${note.localtime}`;
                             return `
-                                <div class="note-item">
-                                    <div class="note-message">${this.escapeHtml(note.message)}</div>
-                                    <div class="note-timestamp">${displayTimestamp}</div>
+                                <div class="note-wrapper">
+                                    <div class="note-delete" data-note-index="${index}">
+                                        <div class="note-delete-ico">X</div>
+                                    </div>
+                                    <div class="note-item">
+                                        <div class="note-message">${this.escapeHtml(note.message)}</div>
+                                        <div class="note-timestamp">${displayTimestamp}</div>
+                                    </div>
                                 </div>
                             `;
                         }).join('');
