@@ -3,8 +3,8 @@
   "short_name": "Receipt",
   "start_url": ".",
   "display": "standalone",
-  "background_color": "#0f172a",
-  "theme_color": "#4b7688",
+  "background_color": "#1B2026",
+  "theme_color": "#3C4147",
   "description": "A PWA to send notes to an ESP32 thermal printer.",
   "icons": [
     {
