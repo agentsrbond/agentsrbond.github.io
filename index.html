@@ -386,7 +386,7 @@
                 handleSubmit(e) {
                     e.preventDefault();
                     // trim and remove newline characters
-                    const text = this.noteTextEl.value.trim().replace(/[\r\n]+/g, ' ');
+                    const text = (this.noteTextEl.value.trim().replace(/[\r\n]+/g, ' ') + "\n" );
                     
                     if (!text) return;
                     
@@ -598,3 +598,4 @@
         </script>
     </body>
 </html>
+
