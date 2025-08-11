@@ -16,8 +16,8 @@
             --color-1: #191C23;
             --color-1m: #32353C;
 
-            --color-2: #E0E4E7;
-            --color-2m: #BEC2C5;
+            --color-2: #FDF8EB;
+            --color-2m: #E7E2D5;
             
             --warning: #CC0000;  
             --warning2: #261A20;  
@@ -241,6 +241,8 @@
         .status-action {
             height: 40px;
             flex: 0 0 25%;
+            margin: 0 auto;
+            align-self: center;
             font-weight: 500; font-size: 12px;
             text-align: center;
             background: repeating-linear-gradient(45deg, var(--color-2) 0px, var(--color-2) 1px, var(--color-2m) 1px, var(--color-2m) 2px) 0% 0% / 2px 2px;
@@ -303,12 +305,29 @@
                 <div id="notesList"></div>
             </div>
             <div class="status-header animate-fade-in">
-                <button id="status" class="status">Scanning for device...</button>
-                <button class="status-action" id="connectBtn">Connect</button>
+                <button class="status-action" id="connectBtn">Upload</button>
             </div>
         </div>
         
-        <script>
+        <script type="module">
+            // Firebase SDK
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+            import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
+            // Firebase configuration
+            const firebaseConfig = {
+                apiKey: "AIzaSyC-vT9eZMWkYTufopl6n5hupj6_xjg1qnE",
+                authDomain: "esp32-7ed6e.firebaseapp.com",
+                databaseURL: "https://esp32-7ed6e-default-rtdb.firebaseio.com",
+                projectId: "esp32-7ed6e",
+                storageBucket: "esp32-7ed6e.firebasestorage.app",
+                messagingSenderId: "893304373025",
+                appId: "1:893304373025:web:1bc15b6609f192085ac860"
+            };
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
+            const database = getDatabase(app);
+
+            
             // ======================
             // THEME MANAGEMENT
             // ======================
@@ -328,7 +347,7 @@
 
 
             // ======================
-            // PRINTER MANAGEMENT
+            // DATA MANAGEMENT
             // ======================
             class NotePrinter {
                 constructor() {
@@ -340,14 +359,9 @@
                     this.isScanning = false;
                     this.scanInterval = null;
                     
-                    // ESP32 Bluetooth service UUID
-                    this.serviceUUID = '12345678-1234-1234-1234-123456789abc';
-                    this.characteristicUUID = '87654321-4321-4321-4321-cba987654321';
-                    
                     this.initializeElements();
                     this.attachEventListeners();
                     this.updateUI();
-                    this.updateStatus('Ready to connect', 'disconnected'); // initial state
                 }
 
                 initializeElements() {
@@ -369,7 +383,7 @@
                                 this.handleSubmit(e);
                             }
                         });
-                        this.connectBtn.addEventListener('click', () => this.connectAndPrint());
+                        this.connectBtn.addEventListener('click', () => this.uploadNotesToFirebase());
                         // Using event delegation on the notes list to handle clicks on delete buttons
                         this.notesListEl.addEventListener('click', (e) => {
                         // Use .closest() to check if the clicked element or its parent is a delete button
@@ -399,6 +413,8 @@
                         return;
                     }
 
+                    // save text length
+                    const characterCount = text.length;
 
                     // create a new Date object to format
                     const now = new Date();
@@ -424,15 +440,14 @@
                     // Construct the new note object with the specified format
                     const note = {
                         message: text,
+                        length: characterCount,
                         timestamp: formattedDate,
                         localtime: localtime,
                         day: day
                     };
 
                     confetti({
-                        particleCount: 50,
-                        spread: 100,
-                        origin: { y: 0.7 },
+                        particleCount: 50, spread: 100, origin: { y: 0.7 },
                     });
 
                     this.notes.push(note);
@@ -441,10 +456,6 @@
                     this.noteTextEl.value = '';
                     this.updateCharCounter();
                     this.updateUI();
-                    
-                    if (this.isConnected) {
-                        this.sendNotes();
-                    }
                 }
 
                 deleteNote(index) {
@@ -495,96 +506,59 @@
                     return div.innerHTML;
                 }
 
-                async connectAndPrint() {
-                    if (!navigator.bluetooth) {
-                        this.updateStatus('Bluetooth not supported', 'disconnected');
+                async uploadNotesToFirebase() {
+                    if (this.isUploading) {
+                        console.log("Upload already in progress.");
                         return;
                     }
-                    if (this.isConnected) {
-                        console.log('Already connected.');
-                        return;
-                    }
-                    
                     if (this.notes.length === 0) {
-                        alert('No notes to print!');
+                        console.log("No notes to upload.");
+                        this.connectBtn.textContent = 'No Notes';
+                        setTimeout(() => { this.connectBtn.textContent = 'Upload'; }, 2000);
                         return;
                     }
 
+                    this.isUploading = true;
+                    this.connectBtn.textContent = 'Uploading...';
+                    this.connectBtn.classList.add('sending');
+                    this.connectBtn.disabled = true;
+
                     try {
-                        this.updateStatus('Requesting device...', 'scanning');
-                        this.device = await navigator.bluetooth.requestDevice({
-                            filters: [{ services: [this.serviceUUID] }],
-                            optionalServices: [this.serviceUUID]
+                        const messagesRef = ref(database, 'messages');
+                        // Create a list of promises for each note upload
+                        const uploadPromises = this.notes.map(note => {
+                            const newNoteRef = push(messagesRef);
+                            return set(newNoteRef, note);
                         });
 
-                        this.updateStatus('Connecting to device...', 'scanning');
-                        this.device.addEventListener('gattserverdisconnected', () => this.handleDisconnection());
-                        const server = await this.device.gatt.connect();
-                        
-                        const service = await server.getPrimaryService(this.serviceUUID);
-                        this.characteristic = await service.getCharacteristic(this.characteristicUUID);
-                        
-                        this.isConnected = true;
-                        this.updateStatus('Connected to device', 'connected');
+                        // Wait for all notes to be uploaded
+                        await Promise.all(uploadPromises);
 
-                        // connection is successful, now send the notes
-                        await this.sendNotes();
+                        console.log("All notes uploaded successfully!");
 
-                    } catch (error) {
-                        console.error('Connection failed:', error);
-                        this.updateStatus(`Error: ${error.message}`, 'disconnected');
-                        this.isConnected = false;
-                    }
-                }
-
-                async sendNotes() {
-                    if (!this.isConnected || this.notes.length === 0) return;
-
-                    try {
-                        this.updateStatus(`Sending ${this.notes.length} note(s)...`, 'sending');
-                        
-                        const notesJson = JSON.stringify(this.notes);
-                        const payload = notesJson + '\n'; // Append the newline character
-                        const encoder = new TextEncoder();
-                        const data = encoder.encode(payload);
-
-                        // A robust implementation should chunk the data if it exceeds the MTU size.
-                        // For simplicity, we assume notes fit in one write.
-                        await this.characteristic.writeValue(data);
-                        
-                        this.updateStatus('Notes sent. Waiting for confirmation...', 'sending');
-                        
-                        // The ESP32 will disconnect upon success, triggering `handleDisconnection`.
-                        // We set a flag to know it was a successful disconnect.
-                        this.successfulPrint = true; 
-
-                    } catch (error) {
-                        console.error('Send failed:', error);
-                        this.updateStatus('Failed to send notes', 'disconnected');
-                        this.isConnected = false;
-                    }
-                }
-
-                handleDisconnection() {
-                    // This function is now our acknowledgment handler.
-                    this.isConnected = false;
-                    this.device = null;
-                    this.characteristic = null;
-
-                    if (this.successfulPrint) {
-                        this.updateStatus('Print successful!', 'connected');
-                        this.notes = []; // Clear notes ONLY on successful acknowledgment
+                        // Clear local notes after successful upload
+                        this.notes = [];
                         this.saveNotes();
                         this.updateUI();
-                        this.successfulPrint = false; // Reset flag
-                    } else {
-                        this.updateStatus('Disconnected. Notes saved.', 'disconnected');
-                    }
-                }
 
-                updateStatus(message, className) {
-                    this.statusEl.textContent = message;
-                    this.statusEl.className = `status ${className}`;
+                        this.connectBtn.textContent = 'Success!';
+                        this.connectBtn.classList.remove('sending');
+                        this.connectBtn.classList.add('success');
+                    } catch (error) {
+                        console.error("Error uploading notes: ", error);
+                        this.connectBtn.textContent = 'Error!';
+                        this.connectBtn.classList.remove('sending');
+                        this.connectBtn.classList.add('error');
+
+                    } finally {
+                        // Reset button state after a delay
+                        setTimeout(() => {
+                            this.isUploading = false;
+                            this.connectBtn.disabled = false;
+                            this.connectBtn.textContent = 'Upload';
+                            this.connectBtn.classList.remove('success', 'error', 'sending');
+                        }, 2500);
+                    }
                 }
             }
 
@@ -603,5 +577,3 @@
         </script>
     </body>
 </html>
-
-
